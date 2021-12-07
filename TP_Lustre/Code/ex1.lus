@@ -1,0 +1,51 @@
+node Test (x:int) returns (z,t:int);
+let
+    z = 0 -> 1 -> 2;
+    t = 0 -> pre(1 -> 2);
+tel
+
+
+node OSC (b:bool) returns (s:bool);
+let
+    s = true -> not pre(s);
+tel
+
+
+node OSC2 (b:bool) returns (s:bool);
+let
+    s = true -> if (pre(s) xor pre(pre(s))) then s else not pre(s);
+tel
+
+
+node OSC2_bis (b:bool) returns (s:bool);
+let
+    s = true -> pre (true -> not pre(s));
+tel
+
+
+node COMPTEUR (reset:bool) returns (n:int);
+let
+    n = 1 -> if (reset) then 0 else pre(n)+1;
+tel
+
+
+node COMPTEUR2 (reset :bool) returns (n:int);
+var A: bool;
+let
+    A = OSC(true);
+    n = 1 -> if (reset or pre(reset)) then 0 else current((pre(n) + 1) when not A);
+tel
+
+
+node ChangeCompteur(reset,c :bool) returns(n :int) ;
+let
+    n = if c then COMPTEUR(reset) else COMPTEUR2(reset);
+tel
+
+
+node QUESTION8(c:bool) returns(s:bool);
+var a:bool;
+let
+    a = OSC2_bis(true);
+    s = true -> a or pre(a);
+tel
