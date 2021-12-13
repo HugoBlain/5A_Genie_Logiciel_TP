@@ -1,0 +1,42 @@
+node COMPTEUR (reset:bool) returns (n:int);
+let
+    n = 1 -> if (reset) then 0 else pre(n)+1;
+tel;
+
+
+node WD1(set, reset, deadline: bool) returns (alarm: bool);
+var is_set: bool;
+let
+    alarm = is_set and deadline;
+    is_set = set -> if reset then false else if set then true else pre(is_set);
+tel;
+
+
+node EDGE (b: bool) returns (edge: bool);
+let
+    edge = false -> (b and not pre(b));
+tel; 
+
+
+node WD2(set, reset: bool; delay: int) returns (alarm: bool);
+var remain: int; deadline: bool;
+let
+    alarm = WD1(set, reset, deadline);
+    deadline = false -> EDGE(remain = 0);
+    remain = if set then delay
+             else if pre(remain) > 0 then pre(remain)-1
+                  else pre(remain);
+tel;
+
+node WD3 (set, reset, time_unit: bool; delay: int) returns (alarm: bool);
+var clock: bool;
+let
+    alarm = current(WD2((set, reset, delay) when clock));
+    clock = true -> (set or reset or time_unit);
+tel
+
+
+
+
+
+

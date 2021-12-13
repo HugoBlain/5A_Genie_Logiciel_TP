@@ -1,0 +1,7 @@
+node CRITERE(X, Y: bool) returns(OK: bool);
+let
+    OK = true -> if( (X = Y) or (pre(X) = Y) or (pre(Y) = X) ) then true
+                 else false;
+tel;
+
+

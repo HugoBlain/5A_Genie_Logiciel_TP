@@ -1,0 +1,14 @@
+node COMPTEUR (reset:bool) returns (n:int);
+let
+    n = 1 -> if (reset) then 0 else pre(n)+1;
+tel;
+
+
+node SOURIS(click: bool) returns (s: int);
+var premierClick: bool; nbrPas : int;
+let
+    nbrPas = COMPTEUR(false) -> if click then COMPTEUR(true) else pre(nbrPas)+1;
+    premierClick = false -> if (click or pre(premierClick)) and nbrPas < 4 then true else false;
+    s = 1 -> if click and pre(premierClick) then 2 else 1;
+tel;
+

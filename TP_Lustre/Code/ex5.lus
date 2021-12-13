@@ -1,0 +1,14 @@
+node DELAY (const d: int; X: bool) returns (Y: bool);
+var A: bool^(d+1);
+let
+    A[0] = X;
+    A[1..d] = (false^(d)) -> pre(A[0..d-1]);
+    Y = A[d];
+tel ;
+
+
+node MAIN_DELAY (A: bool) returns (A_delayed: bool);
+let
+    A_delayed = DELAY(3, A);
+tel;
+
